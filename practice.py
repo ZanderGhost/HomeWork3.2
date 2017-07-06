@@ -1,7 +1,7 @@
 import requests
 
 
-def translate_it(text, translate_lang):
+def translate_it(text, from_lang, to_lang):
     """
     YANDEX translation plugin
 
@@ -23,7 +23,7 @@ def translate_it(text, translate_lang):
 
     params = {
         'key': key,
-        'lang': translate_lang,
+        'lang': '{}-{}'.format(from_lang, to_lang),
         'text': text,
     }
     response = requests.get(url, params=params).json()
@@ -45,15 +45,13 @@ def write_file(file_name, text_translate):
 
 def main():
     in_file = input('Введите имя файла:')
-    in_lang = input('Введите язык текста(возможные варианты: de, es, fr):')
-    out_lang = input('Введите язык на который перевести(возможные варианты: de, es, fr, ru), по умолчанию ru:')
-    if out_lang == '':
-        translate_lang = in_lang + '-ru'
-    else:
-        translate_lang = in_lang + '-' + out_lang
+    from_lang = input('Введите язык текста(возможные варианты: de, es, fr):')
+    to_lang = input('Введите язык на который перевести(возможные варианты: de, es, fr, ru), по умолчанию ru:')
+    if to_lang == '':
+        to_lang = 'ru'
 
     text = read_file(in_file)
-    text_translate = translate_it(text, translate_lang)
+    text_translate = translate_it(text, from_lang, to_lang)
     write_file(in_file, text_translate)
 
 
